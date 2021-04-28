@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hamming codes</title>
+    <url>/blog/Hamming-codes/</url>
+    <content><![CDATA[<h2 id="汉明码">汉明码</h2>
+<h3 id="简介">简介</h3>
+<p>汉明码是一种具有一位纠错能力的编码。使用汉明码编码生成的 <code>n</code> 位二进制串，如果传输过程中有一位的值发生了改变，则在接受端可以<strong>检测</strong>出接收到的结果不正确，并且能够找出具体是哪一位发生了改变。找出是哪一位发生改变后，就可以纠正过来得到正确的结果。但是当有超过一位发生改变时，汉明码就不具有纠错能力了。</p>
+<h3 id="构造">构造</h3>
+<p>令 <span class="math inline">\(H\)</span> 表示一个 <span class="math inline">\(l \times (2^l - 1)\)</span> 的二进制矩阵。<span class="math inline">\(H\)</span> 的每一列都有 <span class="math inline">\(l\)</span> 位，并且 <span class="math inline">\(H\)</span> 的第 <span class="math inline">\(i\)</span> 列是十进制数 <span class="math inline">\(i\)</span> 的二进制表示 <span class="math inline">\(i \in [1, 2, \dots, 2^l - 1]\)</span> 。可以记 <span class="math inline">\(H = [h_1, h_2, \dots, h_{2^l - 1}]\)</span> 其中 <span class="math inline">\(h_i\)</span> 是 <span class="math inline">\(l\)</span> 维的列向量。值得提及的是，<span class="math inline">\(h_i\)</span> 不是零向量。以下j加法计算中，得到的结果都对 2 取模，即 <span class="math inline">\(010 + 110 = 100\)</span> 。</p>
+<span id="more"></span>
+<p>容易知道 <span class="math inline">\(H\)</span> 有如下性质：</p>
+<ul>
+<li><span class="math inline">\(\forall i \neq j, \quad h_i + h_j \neq 0\)</span> 这里的 <span class="math inline">\(0\)</span> 是 <span class="math inline">\(l\)</span> 维零向量</li>
+<li><span class="math inline">\(\exists k, \quad \forall i \neq j, \quad s.t. \quad h_k = h_i + h_j\)</span><br>
+</li>
+<li><span class="math inline">\(rank(H) = l\)</span></li>
+<li><span class="math inline">\(H\)</span> 的零空间的秩为 <span class="math inline">\(2^l - 1 - l\)</span></li>
+</ul>
+<p>由于<span class="math inline">\(H\)</span> 的零空间的秩为 <span class="math inline">\(2^l - 1 - l\)</span> ，故满足 <span class="math inline">\(Hx = 0, \quad x\in [0, 1]^{2^l - 1}\)</span> 的解 <span class="math inline">\(x\)</span> 有 <span class="math inline">\(2^{2^l -1 -l}\)</span> 个。所有的解 <span class="math inline">\(x\)</span> 构成一个线性空间，称为解空间，记为 <span class="math inline">\(X\)</span> 。<span class="math inline">\(rank(X) = 2^l - 1 -l\)</span> 。解空间中的每一个解 <span class="math inline">\(x\)</span> 都是一个 <span class="math inline">\(2^l - 1\)</span> 位的汉明码。</p>
+<h3 id="性质说明">性质说明</h3>
+<p>下面说明 <span class="math inline">\(\forall x_i, x_j \in X, x_i \neq x_j\)</span> ，<span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 至少有 3 位不一样，即 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 的距离大于等于3 。</p>
+<p>证：由于 <span class="math inline">\(H\)</span> 的任意不同的两列相加不为零，相同的两列相加为零。故如果存在 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(x_j\)</span> 的距离为 2，那么根据 <span class="math inline">\(x_i + x_j \in X\)</span> ，可知 <span class="math inline">\(H(x_i + x_j) = 0\)</span> ，这与前面 <span class="math inline">\(H\)</span> 的性质矛盾。故 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 的距离大于 2 。根据上面的 <span class="math inline">\(H\)</span> 第二条性质，可以知道存在 <span class="math inline">\(x_i\)</span> ，<span class="math inline">\(x_j\)</span> 使得两者之间的距离为 3 。</p>
+<h3 id="检验和纠正一位传输错误">检验和纠正一位传输错误</h3>
+<p>下面介绍如何检验汉明码是否传输正确：</p>
+<p>令 <span class="math inline">\(e_i\)</span> 表示第 <span class="math inline">\(i\)</span> 位为 1，其余位为 0 的 <span class="math inline">\(2^l - 1\)</span> 维列向量。<span class="math inline">\(r = e_i + x\)</span> ，则 <span class="math inline">\(r\)</span> 表示 <span class="math inline">\(x\)</span> 第 <span class="math inline">\(i\)</span> 位传输错误接受到的结果。</p>
+<p>则 <span class="math inline">\(\forall x \in X\)</span> ，<span class="math inline">\(H(r) = H(x + e_i) = Hx + He_i = 0 + He_i = h_i\)</span> 。而且如果把二进制串 <span class="math inline">\(h_i\)</span> 转换为十进制，则刚好表示 <span class="math inline">\(i\)</span> 。</p>
+<p>使用矩阵 <span class="math inline">\(H\)</span> 左乘 <span class="math inline">\(r\)</span> ，得到 <span class="math inline">\(l\)</span> 维向量结果 <span class="math inline">\(h\)</span> 。令 <span class="math inline">\(i\)</span> 表示 <span class="math inline">\(h\)</span> 代表的十进制结果。若 <span class="math inline">\(i=0\)</span> ，代表 <span class="math inline">\(r\)</span> 没有发生一位传输错误，否则传输过程中第 <span class="math inline">\(i\)</span> 位传输错误了。</p>
+<h3 id="具体如何编码">具体如何编码</h3>
+<p>假设需要发送的消息为 <span class="math inline">\(k\)</span> 位，存在 <span class="math inline">\(l\)</span> ，使得 <span class="math inline">\(k = 2^l - 1 - l\)</span> 。则经过汉明码编码之后的数据有 <span class="math inline">\(n = k + l = 2 ^l - 1\)</span> 位，其中有 <span class="math inline">\(l\)</span> 位为检验位。</p>
+<p>由上面 <span class="math inline">\(H\)</span> 的构造可以发现，从 <span class="math inline">\(H\)</span> 中挑出第 <span class="math inline">\(2^0, 2^1, \dots, 2^{l-1}\)</span> 列，可以组成一个 <span class="math inline">\(l\)</span> 维的单位阵 <span class="math inline">\(I_l\)</span>，剩余的记为 <span class="math inline">\(H_1\)</span> 。</p>
+<p>从 <span class="math inline">\(x\)</span> 中挑出相应的行出来组成 <span class="math inline">\(c\)</span> ，剩余的记为 <span class="math inline">\(x_1\)</span> 。容易发现 <span class="math inline">\(c\)</span> 有 <span class="math inline">\(l\)</span> 位，<span class="math inline">\(x_1\)</span> 有 <span class="math inline">\(k\)</span> 位。</p>
+<p>则 <span class="math inline">\(Hx = [I_l \quad H_1] [c^T \quad x_1^T]^T = I_l \times c + H_1 \times x_1 = c + H_1 x_1 = 0\)</span> 。故 <span class="math inline">\(c = - H_1x_1\)</span> ，即 <span class="math inline">\(c\)</span> 可以完全由 <span class="math inline">\(x_1\)</span> 决定。</p>
+<p>刚好 <span class="math inline">\(x_1\)</span> 的位数是解空间 <span class="math inline">\(X\)</span> 的秩，因此编码的时候，可以把 <span class="math inline">\(k\)</span> 位消息位依次放置在除了上面挑选出来的 <span class="math inline">\(l\)</span> 位上，剩下的 <span class="math inline">\(l\)</span> 位可以通过 <span class="math inline">\(-H_1x_1\)</span> 计算得到，为奇偶校验位。</p>
+]]></content>
+      <categories>
+        <category>Information Theory</category>
+        <category>Encoding and Decoding</category>
+      </categories>
+      <tags>
+        <tag>Information Theory</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>段落与文本环境</title>
     <url>/blog/LaTeX-paragraph-and-text-environment/</url>
     <content><![CDATA[<p>本文介绍<span class="math inline">\(\LaTeX\)</span>中段落以及各种常用的文本环境的使用方法。 <span id="more"></span></p>
@@ -49,47 +90,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hamming codes</title>
-    <url>/blog/Hamming-codes/</url>
-    <content><![CDATA[<h2 id="汉明码">汉明码</h2>
-<h3 id="简介">简介</h3>
-<p>汉明码是一种具有一位纠错能力的编码。使用汉明码编码生成的 <code>n</code> 位二进制串，如果传输过程中有一位的值发生了改变，则在接受端可以<strong>检测</strong>出接收到的结果不正确，并且能够找出具体是哪一位发生了改变。找出是哪一位发生改变后，就可以纠正过来得到正确的结果。但是当有超过一位发生改变时，汉明码就不具有纠错能力了。</p>
-<h3 id="构造">构造</h3>
-<p>令 <span class="math inline">\(H\)</span> 表示一个 <span class="math inline">\(l \times (2^l - 1)\)</span> 的二进制矩阵。<span class="math inline">\(H\)</span> 的每一列都有 <span class="math inline">\(l\)</span> 位，并且 <span class="math inline">\(H\)</span> 的第 <span class="math inline">\(i\)</span> 列是十进制数 <span class="math inline">\(i\)</span> 的二进制表示 <span class="math inline">\(i \in [1, 2, \dots, 2^l - 1]\)</span> 。可以记 <span class="math inline">\(H = [h_1, h_2, \dots, h_{2^l - 1}]\)</span> 其中 <span class="math inline">\(h_i\)</span> 是 <span class="math inline">\(l\)</span> 维的列向量。值得提及的是，<span class="math inline">\(h_i\)</span> 不是零向量。以下j加法计算中，得到的结果都对 2 取模，即 <span class="math inline">\(010 + 110 = 100\)</span> 。</p>
-<span id="more"></span>
-<p>容易知道 <span class="math inline">\(H\)</span> 有如下性质：</p>
-<ul>
-<li><span class="math inline">\(\forall i \neq j, \quad h_i + h_j \neq 0\)</span> 这里的 <span class="math inline">\(0\)</span> 是 <span class="math inline">\(l\)</span> 维零向量</li>
-<li><span class="math inline">\(\exists k, \quad \forall i \neq j, \quad s.t. \quad h_k = h_i + h_j\)</span><br>
-</li>
-<li><span class="math inline">\(rank(H) = l\)</span></li>
-<li><span class="math inline">\(H\)</span> 的零空间的秩为 <span class="math inline">\(2^l - 1 - l\)</span></li>
-</ul>
-<p>由于<span class="math inline">\(H\)</span> 的零空间的秩为 <span class="math inline">\(2^l - 1 - l\)</span> ，故满足 <span class="math inline">\(Hx = 0, \quad x\in [0, 1]^{2^l - 1}\)</span> 的解 <span class="math inline">\(x\)</span> 有 <span class="math inline">\(2^{2^l -1 -l}\)</span> 个。所有的解 <span class="math inline">\(x\)</span> 构成一个线性空间，称为解空间，记为 <span class="math inline">\(X\)</span> 。<span class="math inline">\(rank(X) = 2^l - 1 -l\)</span> 。解空间中的每一个解 <span class="math inline">\(x\)</span> 都是一个 <span class="math inline">\(2^l - 1\)</span> 位的汉明码。</p>
-<h3 id="性质说明">性质说明</h3>
-<p>下面说明 <span class="math inline">\(\forall x_i, x_j \in X, x_i \neq x_j\)</span> ，<span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 至少有 3 位不一样，即 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 的距离大于等于3 。</p>
-<p>证：由于 <span class="math inline">\(H\)</span> 的任意不同的两列相加不为零，相同的两列相加为零。故如果存在 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(x_j\)</span> 的距离为 2，那么根据 <span class="math inline">\(x_i + x_j \in X\)</span> ，可知 <span class="math inline">\(H(x_i + x_j) = 0\)</span> ，这与前面 <span class="math inline">\(H\)</span> 的性质矛盾。故 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 的距离大于 2 。根据上面的 <span class="math inline">\(H\)</span> 第二条性质，可以知道存在 <span class="math inline">\(x_i\)</span> ，<span class="math inline">\(x_j\)</span> 使得两者之间的距离为 3 。</p>
-<h3 id="检验和纠正一位传输错误">检验和纠正一位传输错误</h3>
-<p>下面介绍如何检验汉明码是否传输正确：</p>
-<p>令 <span class="math inline">\(e_i\)</span> 表示第 <span class="math inline">\(i\)</span> 位为 1，其余位为 0 的 <span class="math inline">\(2^l - 1\)</span> 维列向量。<span class="math inline">\(r = e_i + x\)</span> ，则 <span class="math inline">\(r\)</span> 表示 <span class="math inline">\(x\)</span> 第 <span class="math inline">\(i\)</span> 位传输错误接受到的结果。</p>
-<p>则 <span class="math inline">\(\forall x \in X\)</span> ，<span class="math inline">\(H(r) = H(x + e_i) = Hx + He_i = 0 + He_i = h_i\)</span> 。而且如果把二进制串 <span class="math inline">\(h_i\)</span> 转换为十进制，则刚好表示 <span class="math inline">\(i\)</span> 。</p>
-<p>使用矩阵 <span class="math inline">\(H\)</span> 左乘 <span class="math inline">\(r\)</span> ，得到 <span class="math inline">\(l\)</span> 维向量结果 <span class="math inline">\(h\)</span> 。令 <span class="math inline">\(i\)</span> 表示 <span class="math inline">\(h\)</span> 代表的十进制结果。若 <span class="math inline">\(i=0\)</span> ，代表 <span class="math inline">\(r\)</span> 没有发生一位传输错误，否则传输过程中第 <span class="math inline">\(i\)</span> 位传输错误了。</p>
-<h3 id="具体如何编码">具体如何编码</h3>
-<p>假设需要发送的消息为 <span class="math inline">\(k\)</span> 位，存在 <span class="math inline">\(l\)</span> ，使得 <span class="math inline">\(k = 2^l - 1 - l\)</span> 。则经过汉明码编码之后的数据有 <span class="math inline">\(n = k + l = 2 ^l - 1\)</span> 位，其中有 <span class="math inline">\(l\)</span> 位为检验位。</p>
-<p>由上面 <span class="math inline">\(H\)</span> 的构造可以发现，从 <span class="math inline">\(H\)</span> 中挑出第 <span class="math inline">\(2^0, 2^1, \dots, 2^{l-1}\)</span> 列，可以组成一个 <span class="math inline">\(l\)</span> 维的单位阵 <span class="math inline">\(I_l\)</span>，剩余的记为 <span class="math inline">\(H_1\)</span> 。</p>
-<p>从 <span class="math inline">\(x\)</span> 中挑出相应的行出来组成 <span class="math inline">\(c\)</span> ，剩余的记为 <span class="math inline">\(x_1\)</span> 。容易发现 <span class="math inline">\(c\)</span> 有 <span class="math inline">\(l\)</span> 位，<span class="math inline">\(x_1\)</span> 有 <span class="math inline">\(k\)</span> 位。</p>
-<p>则 <span class="math inline">\(Hx = [I_l \quad H_1] [c^T \quad x_1^T]^T = I_l \times c + H_1 \times x_1 = c + H_1 x_1 = 0\)</span> 。故 <span class="math inline">\(c = - H_1x_1\)</span> ，即 <span class="math inline">\(c\)</span> 可以完全由 <span class="math inline">\(x_1\)</span> 决定。</p>
-<p>刚好 <span class="math inline">\(x_1\)</span> 的位数是解空间 <span class="math inline">\(X\)</span> 的秩，因此编码的时候，可以把 <span class="math inline">\(k\)</span> 位消息位依次放置在除了上面挑选出来的 <span class="math inline">\(l\)</span> 位上，剩下的 <span class="math inline">\(l\)</span> 位可以通过 <span class="math inline">\(-H_1x_1\)</span> 计算得到，为奇偶校验位。</p>
-]]></content>
-      <categories>
-        <category>Information Theory</category>
-        <category>Encoding and Decoding</category>
-      </categories>
-      <tags>
-        <tag>Information Theory</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Attention</title>
     <url>/blog/attention/</url>
     <content><![CDATA[<h1 id="注意力机制-attention">注意力机制 (attention)</h1>
@@ -126,9 +126,11 @@
 <p>使用 <strong>全连接</strong> 当然可以，但是全连接无法处理变长输入问题。这个时候就可以使用自注意力模型了。</p>
 <p>输入：<span class="math inline">\(X\)</span> <span class="math inline">\(D_x \times N\)</span> 维。表示 <span class="math inline">\(N\)</span> 个 <span class="math inline">\(D_x\)</span> 维的列向量。</p>
 <p>过程：首先对 <span class="math inline">\(X\)</span> 经过线性变换，分别得到矩阵 <span class="math inline">\(Q , K, V\)</span> 。 <span class="math display">\[
-Q = W_q X = W_q [x_1, x_2, \dots, x_N] = [W_qx_1, \dots, W_qx_N] = [q_1, \dots, q_N] \\\\ 
-K = W_k X = W_k [x_1, x_2, \dots, x_N] = [W_kx_1, \dots, W_kx_N] = [k_1, \dots, k_N] \\
-V = W_v X = W_v [x_1, x_2, \dots, x_N] = [W_vx_1, \dots, W_vx_N] = [v_1, \dots, v_N]
+\begin{aligned}
+Q &amp;= W_q X = W_q [x_1, x_2, \dots, x_N] = [W_qx_1, \dots, W_qx_N] = [q_1, \dots, q_N] \\
+K &amp;= W_k X = W_k [x_1, x_2, \dots, x_N] = [W_kx_1, \dots, W_kx_N] = [k_1, \dots, k_N] \\
+V &amp;= W_v X = W_v [x_1, x_2, \dots, x_N] = [W_vx_1, \dots, W_vx_N] = [v_1, \dots, v_N]
+\end{aligned}
 \]</span> 使用 <span class="math inline">\(q_1, K=[k_1, \dots, k_N], V=[v_1, \dots, v_N]\)</span> 可以进行上面的键值对注意力计算。计算过程如下：</p>
 <ul>
 <li>计算打分函数 <span class="math inline">\(\hat\alpha_{1,i}\)</span> ：<span class="math inline">\(\hat\alpha_{1,i} = s(k_i, q_1)\)</span></li>
