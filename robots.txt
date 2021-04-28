@@ -10,4 +10,4 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 Sitemap: https://proton00.tech/sitemap.xml
-Sitemap: https://proton00.tech/baidusitemap.xml
+Sitemap: https://pybug.tech/baidusitemap.xml
