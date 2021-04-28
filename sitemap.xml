@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://proton00.tech/about/</loc>
+    
+    <lastmod>2021-04-28</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://proton00.tech/blog/attention/</loc>
     
     <lastmod>2021-04-28</lastmod>
@@ -44,13 +51,6 @@
   </url>
   
   <url>
-    <loc>https://proton00.tech/about/</loc>
-    
-    <lastmod>2021-02-09</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://proton00.tech/tags/</loc>
     
     <lastmod>2019-12-21</lastmod>
@@ -67,6 +67,13 @@
 
   
   <url>
+    <loc>https://proton00.tech/tags/Information-Theory/</loc>
+    <lastmod>2021-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://proton00.tech/tags/LaTeX/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
@@ -81,7 +88,7 @@
   </url>
   
   <url>
-    <loc>https://proton00.tech/tags/Information-Theory/</loc>
+    <loc>https://proton00.tech/tags/machine-learning/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -101,17 +108,24 @@
     <priority>0.6</priority>
   </url>
   
+
+  
   <url>
-    <loc>https://proton00.tech/tags/machine-learning/</loc>
+    <loc>https://proton00.tech/categories/Information-Theory/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
-
-  
   <url>
     <loc>https://proton00.tech/categories/Tools/</loc>
+    <lastmod>2021-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://proton00.tech/categories/Information-Theory/Encoding-and-Decoding/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -132,7 +146,7 @@
   </url>
   
   <url>
-    <loc>https://proton00.tech/categories/Information-Theory/</loc>
+    <loc>https://proton00.tech/categories/Machine-Learning/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -146,14 +160,7 @@
   </url>
   
   <url>
-    <loc>https://proton00.tech/categories/Machine-Learning/</loc>
-    <lastmod>2021-04-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://proton00.tech/categories/Information-Theory/Encoding-and-Decoding/</loc>
+    <loc>https://proton00.tech/categories/Machine-Learning/Basic-Methods/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -161,13 +168,6 @@
   
   <url>
     <loc>https://proton00.tech/categories/Python/decorator/</loc>
-    <lastmod>2021-04-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://proton00.tech/categories/Machine-Learning/Basic-Methods/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
