@@ -9,5 +9,5 @@ Disallow: /css/
 Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
-Sitemap: https://pybug.tech/sitemap.xml
+Sitemap: https://proton00.tech/sitemap.xml
 Sitemap: https://pybug.tech/baidusitemap.xml
