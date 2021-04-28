@@ -118,6 +118,13 @@
   </url>
   
   <url>
+    <loc>https://proton00.tech/categories/Tools/</loc>
+    <lastmod>2021-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://proton00.tech/categories/Information-Theory/Encoding-and-Decoding/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
@@ -125,7 +132,14 @@
   </url>
   
   <url>
-    <loc>https://proton00.tech/categories/Tools/</loc>
+    <loc>https://proton00.tech/categories/Tools/LaTeX/</loc>
+    <lastmod>2021-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://proton00.tech/categories/Tools/LaTeX/LaTeX%E5%85%A5%E9%97%A8/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -146,13 +160,6 @@
   </url>
   
   <url>
-    <loc>https://proton00.tech/categories/Tools/LaTeX/</loc>
-    <lastmod>2021-04-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://proton00.tech/categories/Machine-Learning/Basic-Methods/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
@@ -161,13 +168,6 @@
   
   <url>
     <loc>https://proton00.tech/categories/Python/decorator/</loc>
-    <lastmod>2021-04-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://proton00.tech/categories/Tools/LaTeX/LaTeX%E5%85%A5%E9%97%A8/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
