@@ -49,10 +49,127 @@
       </tags>
   </entry>
   <entry>
+    <title>Hamming codes</title>
+    <url>/blog/Hamming-codes/</url>
+    <content><![CDATA[<h2 id="汉明码">汉明码</h2>
+<h3 id="简介">简介</h3>
+<p>汉明码是一种具有一位纠错能力的编码。使用汉明码编码生成的 <code>n</code> 位二进制串，如果传输过程中有一位的值发生了改变，则在接受端可以<strong>检测</strong>出接收到的结果不正确，并且能够找出具体是哪一位发生了改变。找出是哪一位发生改变后，就可以纠正过来得到正确的结果。但是当有超过一位发生改变时，汉明码就不具有纠错能力了。</p>
+<h3 id="构造">构造</h3>
+<p>令 <span class="math inline">\(H\)</span> 表示一个 <span class="math inline">\(l \times (2^l - 1)\)</span> 的二进制矩阵。<span class="math inline">\(H\)</span> 的每一列都有 <span class="math inline">\(l\)</span> 位，并且 <span class="math inline">\(H\)</span> 的第 <span class="math inline">\(i\)</span> 列是十进制数 <span class="math inline">\(i\)</span> 的二进制表示 <span class="math inline">\(i \in [1, 2, \dots, 2^l - 1]\)</span> 。可以记 <span class="math inline">\(H = [h_1, h_2, \dots, h_{2^l - 1}]\)</span> 其中 <span class="math inline">\(h_i\)</span> 是 <span class="math inline">\(l\)</span> 维的列向量。值得提及的是，<span class="math inline">\(h_i\)</span> 不是零向量。以下j加法计算中，得到的结果都对 2 取模，即 <span class="math inline">\(010 + 110 = 100\)</span> 。</p>
+<span id="more"></span>
+<p>容易知道 <span class="math inline">\(H\)</span> 有如下性质：</p>
+<ul>
+<li><span class="math inline">\(\forall i \neq j, \quad h_i + h_j \neq 0\)</span> 这里的 <span class="math inline">\(0\)</span> 是 <span class="math inline">\(l\)</span> 维零向量</li>
+<li><span class="math inline">\(\exists k, \quad \forall i \neq j, \quad s.t. \quad h_k = h_i + h_j\)</span><br>
+</li>
+<li><span class="math inline">\(rank(H) = l\)</span></li>
+<li><span class="math inline">\(H\)</span> 的零空间的秩为 <span class="math inline">\(2^l - 1 - l\)</span></li>
+</ul>
+<p>由于<span class="math inline">\(H\)</span> 的零空间的秩为 <span class="math inline">\(2^l - 1 - l\)</span> ，故满足 <span class="math inline">\(Hx = 0, \quad x\in [0, 1]^{2^l - 1}\)</span> 的解 <span class="math inline">\(x\)</span> 有 <span class="math inline">\(2^{2^l -1 -l}\)</span> 个。所有的解 <span class="math inline">\(x\)</span> 构成一个线性空间，称为解空间，记为 <span class="math inline">\(X\)</span> 。<span class="math inline">\(rank(X) = 2^l - 1 -l\)</span> 。解空间中的每一个解 <span class="math inline">\(x\)</span> 都是一个 <span class="math inline">\(2^l - 1\)</span> 位的汉明码。</p>
+<h3 id="性质说明">性质说明</h3>
+<p>下面说明 <span class="math inline">\(\forall x_i, x_j \in X, x_i \neq x_j\)</span> ，<span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 至少有 3 位不一样，即 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 的距离大于等于3 。</p>
+<p>证：由于 <span class="math inline">\(H\)</span> 的任意不同的两列相加不为零，相同的两列相加为零。故如果存在 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(x_j\)</span> 的距离为 2，那么根据 <span class="math inline">\(x_i + x_j \in X\)</span> ，可知 <span class="math inline">\(H(x_i + x_j) = 0\)</span> ，这与前面 <span class="math inline">\(H\)</span> 的性质矛盾。故 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 的距离大于 2 。根据上面的 <span class="math inline">\(H\)</span> 第二条性质，可以知道存在 <span class="math inline">\(x_i\)</span> ，<span class="math inline">\(x_j\)</span> 使得两者之间的距离为 3 。</p>
+<h3 id="检验和纠正一位传输错误">检验和纠正一位传输错误</h3>
+<p>下面介绍如何检验汉明码是否传输正确：</p>
+<p>令 <span class="math inline">\(e_i\)</span> 表示第 <span class="math inline">\(i\)</span> 位为 1，其余位为 0 的 <span class="math inline">\(2^l - 1\)</span> 维列向量。<span class="math inline">\(r = e_i + x\)</span> ，则 <span class="math inline">\(r\)</span> 表示 <span class="math inline">\(x\)</span> 第 <span class="math inline">\(i\)</span> 位传输错误接受到的结果。</p>
+<p>则 <span class="math inline">\(\forall x \in X\)</span> ，<span class="math inline">\(H(r) = H(x + e_i) = Hx + He_i = 0 + He_i = h_i\)</span> 。而且如果把二进制串 <span class="math inline">\(h_i\)</span> 转换为十进制，则刚好表示 <span class="math inline">\(i\)</span> 。</p>
+<p>使用矩阵 <span class="math inline">\(H\)</span> 左乘 <span class="math inline">\(r\)</span> ，得到 <span class="math inline">\(l\)</span> 维向量结果 <span class="math inline">\(h\)</span> 。令 <span class="math inline">\(i\)</span> 表示 <span class="math inline">\(h\)</span> 代表的十进制结果。若 <span class="math inline">\(i=0\)</span> ，代表 <span class="math inline">\(r\)</span> 没有发生一位传输错误，否则传输过程中第 <span class="math inline">\(i\)</span> 位传输错误了。</p>
+<h3 id="具体如何编码">具体如何编码</h3>
+<p>假设需要发送的消息为 <span class="math inline">\(k\)</span> 位，存在 <span class="math inline">\(l\)</span> ，使得 <span class="math inline">\(k = 2^l - 1 - l\)</span> 。则经过汉明码编码之后的数据有 <span class="math inline">\(n = k + l = 2 ^l - 1\)</span> 位，其中有 <span class="math inline">\(l\)</span> 位为检验位。</p>
+<p>由上面 <span class="math inline">\(H\)</span> 的构造可以发现，从 <span class="math inline">\(H\)</span> 中挑出第 <span class="math inline">\(2^0, 2^1, \dots, 2^{l-1}\)</span> 列，可以组成一个 <span class="math inline">\(l\)</span> 维的单位阵 <span class="math inline">\(I_l\)</span>，剩余的记为 <span class="math inline">\(H_1\)</span> 。</p>
+<p>从 <span class="math inline">\(x\)</span> 中挑出相应的行出来组成 <span class="math inline">\(c\)</span> ，剩余的记为 <span class="math inline">\(x_1\)</span> 。容易发现 <span class="math inline">\(c\)</span> 有 <span class="math inline">\(l\)</span> 位，<span class="math inline">\(x_1\)</span> 有 <span class="math inline">\(k\)</span> 位。</p>
+<p>则 <span class="math inline">\(Hx = [I_l \quad H_1] [c^T \quad x_1^T]^T = I_l \times c + H_1 \times x_1 = c + H_1 x_1 = 0\)</span> 。故 <span class="math inline">\(c = - H_1x_1\)</span> ，即 <span class="math inline">\(c\)</span> 可以完全由 <span class="math inline">\(x_1\)</span> 决定。</p>
+<p>刚好 <span class="math inline">\(x_1\)</span> 的位数是解空间 <span class="math inline">\(X\)</span> 的秩，因此编码的时候，可以把 <span class="math inline">\(k\)</span> 位消息位依次放置在除了上面挑选出来的 <span class="math inline">\(l\)</span> 位上，剩下的 <span class="math inline">\(l\)</span> 位可以通过 <span class="math inline">\(-H_1x_1\)</span> 计算得到，为奇偶校验位。</p>
+]]></content>
+      <categories>
+        <category>Information Theory</category>
+        <category>Encoding and Decoding</category>
+      </categories>
+      <tags>
+        <tag>Information Theory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Attention</title>
+    <url>/blog/attention/</url>
+    <content><![CDATA[<h1 id="注意力机制-attention">注意力机制 (attention)</h1>
+<h2 id="注意力">注意力</h2>
+<h3 id="软性注意力">软性注意力</h3>
+<p>打分函数：计算两个向量之间的相似度，<span class="math inline">\(\hat{\alpha_i} = s(x_i, q)\)</span> ，<span class="math inline">\(q\)</span> 为查询向量，<span class="math inline">\(x_i\)</span> 为输入信息</p>
+<p>计算注意力分布 <span class="math inline">\(\alpha\)</span> ：<span class="math inline">\(\alpha_i = \text{softmax} (\hat{\alpha_i})\)</span></p>
+<p>计算输出：最后根据 <span class="math inline">\(\alpha\)</span> 来计算输入信息的加权平均：<span class="math inline">\(a = \sum_{i=1}^N \alpha_i x_i\)</span></p>
+<p><img data-src="/blog/attention/fig1.PNG"></p>
+<span id="more"></span>
+<h4 id="打分函数-sx_i-q">打分函数 <span class="math inline">\(s(x_i, q)\)</span></h4>
+<ul>
+<li>加性模型：<span class="math inline">\(s(x_i, q) = v^T \tanh (Wx_i + Uq)\)</span></li>
+<li>点积模型：<span class="math inline">\(s(x_i, q) = x_i^T q\)</span></li>
+<li>缩放点积模型：<span class="math inline">\(s(x_i, q) = \frac{x_i^Tq}{\sqrt{d}}\)</span></li>
+<li>双线性模型：<span class="math inline">\(s(x_i, q) = x_i^TWq\)</span></li>
+</ul>
+<h3 id="硬性注意力">硬性注意力</h3>
+<p>和软性注意力不同，硬性注意力不是根据 <span class="math inline">\(\alpha_i\)</span> 来对 <span class="math inline">\(x_i\)</span> 求加权和，而是取 $ z = (_i)$ 或者根据 <span class="math inline">\(\alpha_i\)</span> 采样出某个 <span class="math inline">\(z\)</span> 。使用 <span class="math inline">\(x_z\)</span> 来作为输出的结果。</p>
+<p><img data-src="/blog/attention/fig2.PNG"></p>
+<h3 id="键值对注意力">键值对注意力</h3>
+<p>键值对注意力机制的输入不再是单独的 <span class="math inline">\(x_i\)</span> ，而是输入一个键值对 <span class="math inline">\((k_i, v_i)\)</span> 。此时权重根据 <span class="math inline">\(k_i\)</span> 与 <span class="math inline">\(q\)</span> 的相似度来计算，而最后的加权和则是 <span class="math inline">\(v_i\)</span> 的加权和。</p>
+<p>打分函数：<span class="math inline">\(\hat{\alpha_i} = s(k_i, q)\)</span></p>
+<p>计算注意力分布 <span class="math inline">\(\alpha\)</span> ：<span class="math inline">\(\alpha_i = \text{softmax}(\hat{\alpha_i})\)</span></p>
+<p>计算输出：<span class="math inline">\(a = \sum_{i=1}^N \alpha_i v_i\)</span></p>
+<h3 id="多头注意力">多头注意力</h3>
+<p>上面的注意力都是根据一个查询 <span class="math inline">\(q\)</span> 来计算的，多头注意力利用多个查询 <span class="math inline">\(Q=[q_1, q_2, \dots, q_M]\)</span> ，来并行地从输入信息中选取多组信息，每个注意力关注输入信息地不同部分。最后把得到的多个查询的结果拼接起来得到最后的结果。 <span class="math display">\[
+\text{att}((K,V),Q) = \text{att}((K, V), q_i) \oplus \dots \oplus \text{att}((K, V), q_M)
+\]</span></p>
+<h2 id="注意力模型">注意力模型</h2>
+<h3 id="自注意力模型">自注意力模型</h3>
+<p>当使用神经网络来处理一个变长的向量序列时，通常可以使用 <strong>卷积网络</strong> 或 <strong>循环网络</strong> 进行编码来得到一个相同长度的输出向量序列。</p>
+<p>但是上面两个网络只建模了输入信息的局部依赖关系。如何建立非局部的依赖关系呢？</p>
+<p>使用 <strong>全连接</strong> 当然可以，但是全连接无法处理变长输入问题。这个时候就可以使用自注意力模型了。</p>
+<p>输入：<span class="math inline">\(X\)</span> <span class="math inline">\(D_x \times N\)</span> 维。表示 <span class="math inline">\(N\)</span> 个 <span class="math inline">\(D_x\)</span> 维的列向量。</p>
+<p>过程：首先对 <span class="math inline">\(X\)</span> 经过线性变换，分别得到矩阵 <span class="math inline">\(Q , K, V\)</span> 。 <span class="math display">\[
+Q = W_q X = W_q [x_1, x_2, \dots, x_N] = [W_qx_1, \dots, W_qx_N] = [q_1, \dots, q_N] \\\\ 
+K = W_k X = W_k [x_1, x_2, \dots, x_N] = [W_kx_1, \dots, W_kx_N] = [k_1, \dots, k_N] \\
+V = W_v X = W_v [x_1, x_2, \dots, x_N] = [W_vx_1, \dots, W_vx_N] = [v_1, \dots, v_N]
+\]</span> 使用 <span class="math inline">\(q_1, K=[k_1, \dots, k_N], V=[v_1, \dots, v_N]\)</span> 可以进行上面的键值对注意力计算。计算过程如下：</p>
+<ul>
+<li>计算打分函数 <span class="math inline">\(\hat\alpha_{1,i}\)</span> ：<span class="math inline">\(\hat\alpha_{1,i} = s(k_i, q_1)\)</span></li>
+<li>计算注意力分布 <span class="math inline">\(\alpha_1\)</span> ：<span class="math inline">\(\alpha_{1,i} = \text{softmax}(\hat\alpha_{1, i})\)</span></li>
+<li>计算输出 <span class="math inline">\(h_1\)</span>：<span class="math inline">\(h_1 = \sum_{i=1}^N \alpha_{1,i} v_i\)</span></li>
+</ul>
+<p>当打分函数使用缩放点积函数时，<span class="math inline">\(s(k_i, q_1) = \frac{q_1^Tk_i}{\sqrt{d}}\)</span> 。</p>
+<p>把 <span class="math inline">\(b_1\)</span> 写成矩阵乘法的形式，可以得到： <span class="math display">\[
+h_1 = V \text{softmax}(\frac{q_1^T K}{\sqrt{d}})
+\]</span> 其中 <span class="math inline">\(d\)</span> 是向量 <span class="math inline">\(q_1\)</span> 的长度，也就是矩阵 <span class="math inline">\(Q\)</span> 的行数。</p>
+<p>当使用所有的 <span class="math inline">\(q_i\)</span> 都进行键值对注意力计算时，可以得到输出：<span class="math inline">\(H = V \ \text{softmax}(K^T Q)\)</span> ，这个可以记为 <span class="math inline">\(H = \text{Attention} (Q, K, V)\)</span></p>
+<p>输出：<span class="math inline">\(H = V \ \text{softmax}(K^T Q)\)</span> <span class="math inline">\(D_v \times N\)</span> 维</p>
+<p>计算图如下：</p>
+<p><img data-src="/blog/attention/fig3.PNG"></p>
+<h3 id="多头注意力模型">多头注意力模型</h3>
+<p>多头注意力模型可以写成下面公式： <span class="math display">\[
+\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \dots, \text{head}_h) W^O
+\]</span> 其中：<span class="math inline">\(\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)\)</span> 。</p>
+<p>相当于对于 <span class="math inline">\(Q, K, V\)</span> 先使用线性变换进行降维得到 <span class="math inline">\(QW_i^Q, KW_i^K, VW_i^V\)</span> ，然后进行 <code>Attention</code> 计算，接着把不同的结果连接到一起，最后再进行一次线性变换得到最后的结果。</p>
+<h3 id="transformer">Transformer</h3>
+<h4 id="位置编码">位置编码</h4>
+<p>在自注意力模型中，可以发现如果交换 <span class="math inline">\(X = [x_1, x_2, \dots, x_N]\)</span> 中的任意两列，则最后计算出来的结果<span class="math inline">\(H = [h_1, h_2, \dots, h_N]\)</span> 中相应的两列也会交换。因此序列的位置不会影响序列计算出来的结果。</p>
+<p>故可以在输入中添加一个 <strong>位置编码</strong> ，使得交换序列的位置，输出的结果会发生改变。</p>
+<p>假设每个位置有唯一的 <code>one-hot</code> 向量 <span class="math inline">\(p_i\)</span> ，将 <span class="math inline">\(p_i\)</span> 和 <span class="math inline">\(x_i\)</span> 拼接的结果 <span class="math inline">\(x&#39;\)</span> 作为新的输入，<span class="math inline">\(x&#39; = [p^T \ x^T]^T\)</span>。这样交换序列的位置，序列的位置就会发生改变，因此序列的位置向量 <span class="math inline">\(p\)</span> 就会发生改变，最后得到的结果就会不一样。</p>
+<p>可以使用<strong>正余弦函数</strong>作为位置编码，只要周期适当，可以做到每个位置的位置编码不一样。</p>
+<h4 id="transformer-结构解释">transformer 结构解释</h4>
+<p><img data-src="/blog/attention/fig4.PNG"></p>
+<p>这张图片信息量比较大，就先不解释了。。。</p>
+]]></content>
+      <categories>
+        <category>Machine Learning</category>
+        <category>Basic Methods</category>
+      </categories>
+      <tags>
+        <tag>machine learning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>在类方法上应用基于类的装饰器时产生错误：missing required positional arguments &#39;self&#39;.</title>
     <url>/blog/python-class-based-descriptor-applied-to-method/</url>
-    <content><![CDATA[<p>假设我们写好了一个基于类的装饰器: <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">print_name</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, func</span>):</span></span><br><span class="line">        self.func = func</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;calling function `<span class="subst">&#123;self.func.__name__&#125;</span>`...&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br></pre></td></tr></table></figure> 我们可能会想要装饰在类方法上，像这样： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">someClass</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @print_name</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">someMethod</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;decorator is tricky:)&quot;</span>)</span><br></pre></td></tr></table></figure> 看起来似乎没什么问题？Just try it.</p>
-<span id="more"></span>
+    <content><![CDATA[<p>现在我们写了一个基于类的装饰器，它很简单，能够在函数调用之前打印函数的名字: <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">print_name</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, func</span>):</span></span><br><span class="line">        self.func = func</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;calling function `<span class="subst">&#123;self.func.__name__&#125;</span>`...&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br></pre></td></tr></table></figure> 我们可能会想要装饰在类方法上，像这样： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">someClass</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @print_name</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">someMethod</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;decorator may be tricky:)&quot;</span>)</span><br></pre></td></tr></table></figure> 看起来似乎没什么问题？然而... <span id="more"></span></p>
 <div class="note info"><p>Python version: 3.8.0</p>
 </div>
 <h2 id="从程序计时器说起">从程序计时器说起</h2>
