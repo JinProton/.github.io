@@ -375,10 +375,10 @@
       <span class="post-meta-item-icon">
         <i class="far fa-comment"></i>
       </span>
-      <span class="post-meta-item-text">Disqus：</span>
+      <span class="post-meta-item-text">Valine：</span>
     
-    <a title="disqus" href="/blog/python-class-based-descriptor-applied-to-method/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="blog/python-class-based-descriptor-applied-to-method/" itemprop="commentCount"></span>
+    <a title="valine" href="/blog/python-class-based-descriptor-applied-to-method/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/python-class-based-descriptor-applied-to-method/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -480,10 +480,10 @@
       <span class="post-meta-item-icon">
         <i class="far fa-comment"></i>
       </span>
-      <span class="post-meta-item-text">Disqus：</span>
+      <span class="post-meta-item-text">Valine：</span>
     
-    <a title="disqus" href="/blog/Hamming-codes/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="blog/Hamming-codes/" itemprop="commentCount"></span>
+    <a title="valine" href="/blog/Hamming-codes/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/Hamming-codes/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -589,10 +589,10 @@
       <span class="post-meta-item-icon">
         <i class="far fa-comment"></i>
       </span>
-      <span class="post-meta-item-text">Disqus：</span>
+      <span class="post-meta-item-text">Valine：</span>
     
-    <a title="disqus" href="/blog/attention/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="blog/attention/" itemprop="commentCount"></span>
+    <a title="valine" href="/blog/attention/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/attention/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -704,10 +704,10 @@
       <span class="post-meta-item-icon">
         <i class="far fa-comment"></i>
       </span>
-      <span class="post-meta-item-text">Disqus：</span>
+      <span class="post-meta-item-text">Valine：</span>
     
-    <a title="disqus" href="/blog/LaTeX-paragraph-and-text-environment/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="blog/LaTeX-paragraph-and-text-environment/" itemprop="commentCount"></span>
+    <a title="valine" href="/blog/LaTeX-paragraph-and-text-environment/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/LaTeX-paragraph-and-text-environment/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -813,10 +813,10 @@
       <span class="post-meta-item-icon">
         <i class="far fa-comment"></i>
       </span>
-      <span class="post-meta-item-text">Disqus：</span>
+      <span class="post-meta-item-text">Valine：</span>
     
-    <a title="disqus" href="/blog/LaTeX-text-and-symbols/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="blog/LaTeX-text-and-symbols/" itemprop="commentCount"></span>
+    <a title="valine" href="/blog/LaTeX-text-and-symbols/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/LaTeX-text-and-symbols/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1118,16 +1118,16 @@ if (document.querySelectorAll('.mermaid').length) {
       });
       });
   </script>
-
 <script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://proton00.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/",
+    }, {"enable":true,"appId":"yYmRh6n3aqTd4eBgapMxoYNc-gzGzoHsz","appKey":"f2FposUXIQi2IMEv58HvoK2J","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":false,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
 </script>
 
     </div>

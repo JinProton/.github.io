@@ -637,16 +637,16 @@ if (document.querySelectorAll('.mermaid').length) {
       });
       });
   </script>
-
 <script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://proton00.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/categories/Tools/LaTeX/LaTeX%E5%85%A5%E9%97%A8/",
+    }, {"enable":true,"appId":"yYmRh6n3aqTd4eBgapMxoYNc-gzGzoHsz","appKey":"f2FposUXIQi2IMEv58HvoK2J","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":false,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
 </script>
 
     </div>
