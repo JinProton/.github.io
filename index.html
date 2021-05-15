@@ -241,20 +241,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -316,6 +316,178 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://proton00.tech/blog/RNN_model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.ico">
+      <meta itemprop="name" content="Proton">
+      <meta itemprop="description" content="Simple is Better than Complex">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Record Life">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/RNN_model/" class="post-title-link" itemprop="url">RNN language model</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：5月 15日, 2021 13:43" itemprop="dateCreated datePublished" datetime="2021-05-15T13:43:57+08:00">5月 15日, 2021</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Machine-Learning/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/blog/RNN_model/" class="post-meta-item leancloud_visitors" data-flag-title="RNN language model" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/blog/RNN_model/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/RNN_model/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        
+          <h1 id="lab3-rnn-语言模型文本分类">Lab3 RNN 语言模型，文本分类</h1>
+<h2 id="实验目的">实验目的</h2>
+<p>编写 <code>RNN</code> 的语言模型，并基于训练好的词向量，编写 <code>RNN</code> 模型用于文本分类。</p>
+<p>这个实现需要编写一个 <code>RNN</code> 模型，并且基于训练好的词向量，使用编写的 <code>RNN</code> 模型完成文本分类的任务。</p>
+<h2 id="数据集和数据处理">数据集和数据处理</h2>
+<h3 id="数据集">数据集</h3>
+<p>这个实验使用的数据集为 <code>aclImdb</code> 数据集，这个数据集是一个二分类的情感分类数据集，数据集提供了 25000 个训练样本和 25000 个测试样本。数据集下载地址为 ：<a target="_blank" rel="noopener" href="http://ai.stanford.edu/~amaas/data/sentiment/">Sentiment Analysis (stanford.edu)</a> 。</p>
+<p>这个实验还使用了 <code>GLoVe</code> 预训练词向量数据，使用的是 <code>glove.6B</code> 的词向量，下载地址为 ：<a target="_blank" rel="noopener" href="https://nlp.stanford.edu/projects/glove/">GloVe: Global Vectors for Word Representation (stanford.edu)</a></p>
+<h3 id="数据处理">数据处理</h3>
+<p>首先把数据解压到自己定义的路径，并且把 <code>aclImdb</code> 数据读入到内存中。</p>
+<h4 id="创建-vocab">创建 <code>vocab</code></h4>
+<p>然后使用 <code>torchtext</code> 库对语料进行处理，创建模型使用到的词库 <code>vocab</code> ，在创建词库的过程中，使用 <code>glove</code> 预训练的词向量对词库的词进行编码，得到 <code>Embedding Matrix</code> 。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">tokenizer = get_tokenizer(<span class="string">&#x27;basic_english&#x27;</span>)</span><br><span class="line">data = RawData.read_imdb(type_=<span class="string">&quot;train&quot;</span>)</span><br><span class="line">counter = Counter()</span><br><span class="line"><span class="keyword">for</span> line, label <span class="keyword">in</span> data:</span><br><span class="line">counter.update(tokenizer(line))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(os.path.join(root_data_path, <span class="string">&quot;glove.6B&quot;</span>)):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;&gt;&gt;&gt; start decompression embedding file&quot;</span>)</span><br><span class="line">    from_path = compress_embedding_file</span><br><span class="line">    to_path = os.path.join(root_data_path, <span class="string">&quot;glove.6B&quot;</span>)</span><br><span class="line">    extract_archive(from_path=from_path, to_path=to_path)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;&gt;&gt;&gt; end decompression embedding file&quot;</span>)</span><br><span class="line"></span><br><span class="line">vectors = Vectors(name=glove_file_name, cache=os.path.join(root_data_path, <span class="string">&#x27;glove.6B&#x27;</span>))</span><br><span class="line"></span><br><span class="line">vocab = Vocab(counter=counter, min_freq=min_freq,</span><br><span class="line">vectors=vectors)</span><br></pre></td></tr></table></figure>
+<p>在处理过程中，首先使用把字符串句子转换为单词列表，然后统计每种单词的个数，使用这个字典和 <code>Embedding Matrix</code> 创建 <code>Vocab</code> 。</p>
+<p>值得注意的是，实验中的 <code>Vocab</code> 仅仅使用了训练集上的数据，并没有使用测试集上的数据，也就是说如果测试集中出现了训练集中没有的单词，则这个单词的 <code>Embedding</code> 向量会使用空向量。</p>
+<h4 id="批输入对齐">批输入对齐</h4>
+<p>由于 <code>pytorch</code> 的输入中，一批的数据需要长度是对齐的，因此对于一批数据中不同长度的句子，需要通过在后面填充值的方式对齐。对齐代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">collate_fn</span>(<span class="params">batch_data, pad=<span class="number">0</span></span>):</span></span><br><span class="line">    <span class="comment"># label_list, text_list, offsets = [], [], []</span></span><br><span class="line">    <span class="comment"># 取出长度最长的</span></span><br><span class="line">    offsets = [<span class="built_in">len</span>(sentence[<span class="number">0</span>]) <span class="keyword">for</span> sentence <span class="keyword">in</span> batch_data]</span><br><span class="line">    max_len = <span class="built_in">max</span>(offsets)</span><br><span class="line">    label_list = [sentence[<span class="number">1</span>] <span class="keyword">for</span> sentence <span class="keyword">in</span> batch_data]</span><br><span class="line">    text_list = [sentence[<span class="number">0</span>] + [pad] * (max_len - <span class="built_in">len</span>(sentence[<span class="number">0</span>])) <span class="keyword">for</span> sentence <span class="keyword">in</span> batch_data]</span><br><span class="line">    text_tensor = torch.LongTensor(text_list)</span><br><span class="line">    label_tensor = torch.LongTensor(label_list)</span><br><span class="line">    offsets_tensor = torch.LongTensor(offsets)</span><br><span class="line">    <span class="keyword">return</span> text_tensor, label_tensor, offsets_tensor</span><br></pre></td></tr></table></figure>
+<h4 id="相近长度的数据放到同一批中">相近长度的数据放到同一批中</h4>
+<p>把相近长度的数据放到同一批中，会增加模型训练速度。可以自定义 <code>Sampler</code> 函数达到这个效果，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySampler</span>(<span class="params">Sampler</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, dataset, batch_size</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Sampler, self).__init__()</span><br><span class="line">        self.dataset = dataset</span><br><span class="line">        self.batch_size = batch_size</span><br><span class="line">        self.indices = np.argsort([<span class="built_in">len</span>(sentence[<span class="number">0</span>]) <span class="keyword">for</span> sentence <span class="keyword">in</span> dataset])[::-<span class="number">1</span>]</span><br><span class="line">        self.count = <span class="built_in">int</span>(<span class="built_in">len</span>(dataset) / self.batch_size)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.count):</span><br><span class="line">            <span class="keyword">yield</span> self.indices[i * self.batch_size: (i + <span class="number">1</span>) * self.batch_size]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.count</span><br></pre></td></tr></table></figure>
+<h2 id="实验设计">实验设计</h2>
+<p>在所有的实验中，数据都需要经过一个 <code>Embedding</code> 的矩阵，这个矩阵的参数是由 <code>vocab</code> 的映射矩阵初始化而成的，在实验过程中设置为可更新的参数。</p>
+<p>在实验中，由于数据经过了 <code>padding</code> ，所以数据经过 <code>Embedding</code> 之后，输入到 <code>RNN</code> 模型之前，需要先经过 <code>pack_padded_sequence</code> 操作，这样 <code>RNN</code> 才能识别出句子的实际长度为多长。</p>
+<p>实验使用的 <code>RNN</code> 模型比较简单，分别使用了一层和多层的 <code>RNN</code> 和 <code>LSTM</code> 模型，模型的基本定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RNN</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, vocab_size, embed_dim, num_class, hidden_size, num_layers</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(RNN, self).__init__()</span><br><span class="line">        self.num_layers = num_layers</span><br><span class="line">        self.embedding = nn.Embedding(num_embeddings=vocab_size,</span><br><span class="line">                                      embedding_dim=embed_dim)</span><br><span class="line">        vocab = RawData.get_vocab()</span><br><span class="line"></span><br><span class="line">        self.embedding.weight.data.copy_(vocab.vectors)</span><br><span class="line"></span><br><span class="line">        self.rnn = nn.RNN(input_size=embed_dim,</span><br><span class="line">                          hidden_size=hidden_size,</span><br><span class="line">                          num_layers=num_layers,</span><br><span class="line">                          nonlinearity=<span class="string">&#x27;tanh&#x27;</span>,</span><br><span class="line">                          batch_first=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        self.fc = nn.Linear(hidden_size, num_class)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, inputs, offsets</span>):</span></span><br><span class="line">        embeds = self.embedding(inputs)</span><br><span class="line">        offsets = offsets.to(<span class="string">&quot;cpu&quot;</span>)</span><br><span class="line">        packed_x = pack_padded_sequence(<span class="built_in">input</span>=embeds, lengths=offsets, batch_first=<span class="literal">True</span>)</span><br><span class="line">        x = self.rnn(packed_x)</span><br><span class="line">        x = x[-<span class="number">1</span>]</span><br><span class="line">        x = x.view(-<span class="number">1</span>, x.shape[<span class="number">1</span>], x.shape[<span class="number">2</span>])</span><br><span class="line">        x = x[-<span class="number">1</span>]</span><br><span class="line">        x = self.fc(x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>在实验过程中，根据 <code>val_acc</code> 早停，并且设置 <code>delay</code> 为 5，会保存 <code>val_acc</code> 最好的模型权重，并且最后加载最好的权重测试测试集。实验结果中都是 <code>val_acc</code> 最好的权重在数据上的表现。</p>
+<h2 id="实验结果">实验结果</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">model_type</th>
+<th style="text-align: center;">layer_num</th>
+<th style="text-align: center;">train_acc</th>
+<th style="text-align: center;">val_acc</th>
+<th style="text-align: center;">test_acc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">LSTM</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.9901</td>
+<td style="text-align: center;">0.8860</td>
+<td style="text-align: center;">0.8624</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">LSTM</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.9699</td>
+<td style="text-align: center;">0.885</td>
+<td style="text-align: center;">0.8727</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">RNN</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.8165</td>
+<td style="text-align: center;">0.7852</td>
+<td style="text-align: center;">0.7856</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">RNN</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.8031</td>
+<td style="text-align: center;">0.7778</td>
+<td style="text-align: center;">0.7794</td>
+</tr>
+</tbody>
+</table>
+<h2 id="结果解释">结果解释</h2>
+<p>通过上面的实验结果，可以发现 <code>LSTM</code> 模型的实验结果明显好于 <code>RNN</code> 的结果。由于句子长度最长的可以达到一千多个单词，因此可见 <code>LSTM</code> 在长程依赖上要好于 <code>RNN</code> ，能够表现得更好。</p>
+<p>加深层数，实验结果差不多，可能是由于即使加深了层数，利用的结果还是最后一层的最后一个隐变量的输出接上全连接层最后预测类别。因此结果提升不大。</p>
+<h2 id="总结">总结</h2>
+<p>通过这个实验，学会了 <code>torchtext</code> 这个库的使用，学会了自然语言处理的一些操作。还体会到了 <code>RNN</code> 模型在自然语言处理上的强大。</p>
+<p>注：数据集放置在 <code>./RNN/</code> 目录下面，地址可以在程序的 config.py 中设置。如果需要运行代码，直接执行 python main.py 即可</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -778,124 +950,11 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://proton00.tech/blog/LaTeX-text-and-symbols/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.ico">
-      <meta itemprop="name" content="Proton">
-      <meta itemprop="description" content="Simple is Better than Complex">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Record Life">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/LaTeX-text-and-symbols/" class="post-title-link" itemprop="url">文字与符号</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：1月 18日, 2020 13:56" itemprop="dateCreated datePublished" datetime="2020-01-18T13:56:33+08:00">1月 18日, 2020</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：4月 27日, 2021 19:56" itemprop="dateModified" datetime="2021-04-27T19:56:26+08:00">4月 27日, 2021</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Tools/LaTeX/" itemprop="url" rel="index"><span itemprop="name">LaTeX</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Tools/LaTeX/LaTeX%E5%85%A5%E9%97%A8/" itemprop="url" rel="index"><span itemprop="name">LaTeX入门</span></a>
-        </span>
-    </span>
 
   
-    <span id="/blog/LaTeX-text-and-symbols/" class="post-meta-item leancloud_visitors" data-flag-title="文字与符号" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/blog/LaTeX-text-and-symbols/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/blog/LaTeX-text-and-symbols/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        
-          <p>本文介绍<span class="math inline">\(\LaTeX\)</span>中最基本的对象：字符、盒子的使用。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/LaTeX-text-and-symbols/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
-
-  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
